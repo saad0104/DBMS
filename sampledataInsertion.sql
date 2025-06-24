@@ -4,10 +4,7 @@ DROP SCHEMA IF EXISTS drugData;
 -- Create the schema
 CREATE SCHEMA drugData;
 
--- Use the newly created schema
 USE drugData;
-
--- Create the 'Drugs' table inside the schema
 
 
 CREATE TABLE IF NOT EXISTS DrugInformation (
@@ -40,19 +37,7 @@ CREATE TABLE IF NOT EXISTS DrugInformation (
 );
 select count(*) from sampleInformation   ;
 
--- SELECT COUNT(*) AS drug_count
--- FROM DrugInformation
--- WHERE side_effect_1 = 'nausea' OR side_effect_2 = 'nausea' OR side_effect_3 = 'nausea'
---    OR side_effect_4 = 'nausea' OR side_effect_5 = 'nausea';
---    SELECT drug_name
--- FROM DrugInformation
--- WHERE interacts_with = 'butabarbital' OR interacts_with_1 = 'butabarbital' OR interacts_with_2 = 'butabarbital';
 
--- INSERT INTO clinical_trials 
--- (drug_name, side_effect_1, side_effect_2, side_effect_3, side_effect_4, side_effect_5, interacts_with, interacts_with_1, interacts_with_2, disease_name, disease_category, drug_category, product_name, company_name, clinical_trial_title, clinical_trial_start_date, clinical_trial_completion_date, clinical_trial_participants, clinical_trial_status, clinical_trial_condition, clinical_trial_condition_1, clinical_trial_address, clinical_trial_institution, clinical_trial_address_1, clinical_trial_main_researcher, clinical_trial_condition_2)
--- VALUES
--- ('Example Drug 1', 'Nausea', 'Headache', 'Dizziness', 'Fatigue', 'Insomnia', 'Drug A', 'Drug B', 'Drug C', 'Example Disease 1', 'Cancer', 'Chemotherapy', 'DrugNameX', 'PharmaCorp', 'Trial A', '2023-01-15', '2024-06-30', 200, 'Completed', 'Treatment of Example Disease 1', 'Treatment Resistance', '123 Research Lane, City, State', 'City Hospital', '1234 Street Ave, City', 'Dr. Smith', 'Stage IV'),
--- ('Example Drug 2', 'Vomiting', 'Diarrhea', 'Rashes', 'Drowsiness', 'Weight Gain', 'Drug D', 'Drug E', 'Drug F', 'Example Disease 2', 'Diabetes', 'Oral Antidiabetics', 'DrugNameY', 'MedCorp', 'Trial B', '2022-06-01', '2023-12-15', 500, 'Ongoing', 'Management of Blood Glucose', 'Blood Sugar Fluctuation', '456 Medical Rd, Town, State', 'Town Clinic', '4567 Lane Blvd, Town', 'Dr. Johnson', 'Type 2 Diabetes');
 
 CREATE TABLE IF NOT EXISTS sampleInformation (
     drug_name VARCHAR(100) CHARACTER SET utf8 ,  -- No single quotes are needed for column types
