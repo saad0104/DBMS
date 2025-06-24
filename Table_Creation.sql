@@ -4,7 +4,6 @@ DROP database IF EXISTS medical_db;
 CREATE DATABASE medical_db;
 USE medical_db;
 
--- Table for storing drug information
 CREATE TABLE drugs (
     drug_id INT AUTO_INCREMENT PRIMARY KEY,
     drug_name VARCHAR(100) NOT NULL
@@ -22,14 +21,12 @@ CREATE TABLE IF NOT EXISTS drug_categorized_by (
     FOREIGN KEY (drug_category_id) REFERENCES drug_categories(drug_category_id),
     PRIMARY KEY (drug_id, drug_category_id)
 );
--- Table for storing drug side effects
 CREATE TABLE side_effects (
     side_effect_id INT AUTO_INCREMENT PRIMARY KEY,
     side_effect_name VARCHAR(100) NOT NULL,
     unique(side_effect_name)
 );
 
--- Table for drug-to-side effect relationships (many-to-many)
 CREATE TABLE drug_side_effect (
     drug_id INT,
     side_effect_id INT,
@@ -38,7 +35,6 @@ CREATE TABLE drug_side_effect (
     FOREIGN KEY (side_effect_id) REFERENCES side_effects(side_effect_id)
 );
 
--- Table for drug interactions
 CREATE TABLE drug_interactions (
     interaction_id INT AUTO_INCREMENT PRIMARY KEY,
     drug_id INT,
@@ -47,7 +43,6 @@ CREATE TABLE drug_interactions (
     UNIQUE (drug_id, interacts_with)
 );
 
--- Table for storing disease information
 
 CREATE TABLE IF NOT EXISTS diseases (
     disease_id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -55,7 +50,6 @@ CREATE TABLE IF NOT EXISTS diseases (
     disease_category VARCHAR(100)  
 );
 
--- Table for drug-to-disease relationships (many-to-many)
 CREATE TABLE drug_disease (
     drug_id INT,
     disease_id INT,
@@ -64,8 +58,6 @@ CREATE TABLE drug_disease (
     FOREIGN KEY (disease_id) REFERENCES diseases(disease_id)
 );
 
--- Table for clinical trial information
--- Create the clinical_trials table
 CREATE TABLE IF NOT EXISTS clinical_trials (
     clinical_trial_id INT AUTO_INCREMENT PRIMARY KEY,
     drug_id INT,
@@ -80,7 +72,6 @@ CREATE TABLE IF NOT EXISTS clinical_trials (
     FOREIGN KEY (drug_id) REFERENCES drugs (drug_id)  -- Foreign key to the drugs table
 );
 
--- Create the clinicalTrialLocation table
 CREATE TABLE IF NOT EXISTS clinicalTrialLocation (
     location_id INT AUTO_INCREMENT PRIMARY KEY,
     clinical_trial_id INT,  -- Foreign key referencing clinical_trials
@@ -102,7 +93,6 @@ create table product(
     unique(prod_name)
 );
 
--- space 
 INSERT INTO drugs (drug_name)
 SELECT DISTINCT drug_name 
 FROM drugData.sampleInformation
@@ -171,16 +161,12 @@ JOIN drugs d ON si.drug_name = d.drug_name
 JOIN side_effects se ON si.side_effect_4 = se.side_effect_name
 WHERE si.side_effect_4 IS NOT NULL;
 
--- select * from drug_side_effect;
--- insert drug catagory
 
 INSERT INTO drug_categories (drug_category)
 SELECT DISTINCT d.drug_category 
 FROM drugdata.sampleinformation d
 WHERE d.drug_category IS NOT NULL;
--- select * from drug_categories;
 
--- insert drug_categorized by
 INSERT ignore INTO drug_categorized_by (drug_id, drug_category_id)
 SELECT d.drug_id, dc.drug_category_id
 FROM drugdata.sampleinformation di
@@ -190,14 +176,12 @@ WHERE di.drug_category IS NOT NULL;
 
 
 
--- Insert drug interactions for the first column `interacts_with`
 INSERT IGNORE INTO drug_interactions (drug_id, interacts_with)
 SELECT d.drug_id, si.interacts_with
 FROM drugData.sampleInformation si
 JOIN drugs d ON si.drug_name = d.drug_name
 WHERE si.interacts_with IS NOT NULL;
 
--- Insert drug interactions for the second column `interacts_with_1`
 INSERT IGNORE INTO drug_interactions (drug_id, interacts_with)
 SELECT d.drug_id, si.interacts_with_1
 FROM drugData.sampleInformation si
@@ -211,13 +195,12 @@ FROM drugData.sampleInformation si
 JOIN drugs d ON si.drug_name = d.drug_name
 WHERE si.interacts_with_2 IS NOT NULL;
 
--- select count(*) from drug_interactions;
+
 
 INSERT INTO diseases (disease_name, disease_category)
 SELECT DISTINCT disease_name, disease_category 
 FROM drugData.sampleInformation
 where disease_name is not null;
-
 
 
 INSERT ignore INTO product (prod_name, company_name, drug_id)
@@ -269,39 +252,3 @@ FROM drugData.sampleInformation si
 JOIN clinical_trials ct ON si.clinical_trial_title = ct.clinical_trial_title  
 WHERE si.clinical_trial_address IS NOT NULL;
 
-
-
-
--- emne 
-
-
--- select  *
-
--- from drug_interactions
--- left join drugs
--- on drugs.drug_id=drug_interactions.drug_id
--- ;
--- select * from clinical_trials;
-
--- select * from product;
-
--- select * from diseases;
-
--- select * from drug_disease;
-
--- select * from clinicalTrialLocation;
--- SELECT 
---     ct.clinical_trial_id,
---     ct.drug_id,
---     ct.clinical_trial_title,
---     ct.clinical_trial_completion_date,
---     ct.clinical_trial_participants,
---     ct.clinical_trial_status,
---     ct.clinical_trial_condition,
---     ct.clinical_trial_main_researcher,
---     ctl.location_id,
---     ctl.clinical_trial_address,
---     ctl.clinical_trial_institution,
---     ctl.clinical_trial_address_1
--- FROM clinical_trials ct
--- JOIN clinicalTrialLocation ctl ON ct.clinical_trial_id = ctl.clinical_trial_id;
